@@ -1,156 +1,485 @@
-#include <iostream>  // cin, cout function ashiglakh
-#include <cstring>   // strcpy(), strlen() zereg function ashiglakh
-#include <cmath>     // M_PI, sqrt() zereg math-iin function ashiglakh
+Полиморфизм, Статик , Хийсвэр функц ба Хийсвэр класс
+(Лаборатори №8)
+ Багийн нэр: The Trinity
+С. Аминаа 
+МТЭС, МКУТ- ийн оюутан, 23b1num0310 Мэдээллийн систем 
+Б. Өмирсерик
+МТЭС, МКУТ- ийн оюутан, 23b1num3031 Компьютерын ухаан 
+Б. Тэмүүлэн 
+МТЭС, МКУТ- ийн оюутан, 23b1num0254 Мэдээллийн систем
+1. ОРШИЛ
+     Объект хандалтат програмчлалын нэг чухал ойлголт болох полиморфизм, статик гишүүд, хийсвэр класс, болон жинхэнэ хийсвэр функц зэргийг хэрхэн C++ хэл дээр хэрэгжүүлж ашиглахыг энэ лабораторийн ажлаар судалж байна. Полиморфизм нь нэг интерфейстэй боловч олон төрлийн хэрэгжүүлэлтийг агуулж чаддаг объект хандалтат програмчлалын үндсэн шинж чанар юм. Үүнийг хийсвэр класс болон жинхэнэ хийсвэр функцээр дамжуулан хэрэгжүүлдэг.
+    Мөн static гишүүн өгөгдөл болон функц нь класст бүх объектод нийтлэг байдаг шинжтэй тул олон объект дундах мэдээллийг хянах, тоолох зэрэгт ашиглагддаг. Энэ лабораторийн ажилд this заагчийг ашиглан гишүүн өгөгдөл болон функцүүд рүү хандах аргыг давхар судлах болно.
+
+2. ЗОРИЛГО
+Энэхүү лабораторийн тайлан нь дараах зорилгод чиглэнэ: 
+Полиморфизм болон жинхэнэ хийсвэр функцийн тухай ойлголттой болох
+static гишүүн өгөгдөл болон функцүүдийг хэрхэн зарлах, ашиглахыг сурах
+this заагчийн үүрэг, хэрэглээг ойлгох
+Хийсвэр класс болон жинхэнэ хийсвэр функц ашиглан олон хэлбэртэй програмчлалыг хэрэгжүүлэх
+Объектуудыг талбай, периметрийн утгаар нь эрэмбэлэх замаар функцүүдийг polymorphic байдлаар ашиглах
+3. ОНОЛЫН СУДАЛГАА
+3.1 This хувьсагч гэж юу вэ?      
+      Тухайн классын буюу объектийн гишүүн функцыг хэрэглэж байгаа объектын хаягийг заадаг тусгай зориулалтын хаяган хувьсагчийг this хувьсагч гэнэ. Гишүүн функц  дотроос өөрийн гишүүдэд хандахдаа ашиглана. Объектоос гишүүн функцийг дуудах үед C++ комлайлер нь тухайн объектийн хаягийг this хувьсагчид хийсний дараа дуудагдсан функц руу програмын удирдлагыг шилжлүүдэг. Ингэснээр гишүүн функц дуудагдсан объектынхоо хаягийг мэдэх, гишүүн функц бүр this хувьсагчийг ашиглах боломжтой юм. This хувьсагчийг илээр болон далдаар ашигладаг бөгөөд хэрвээ илээр тодорхойлж өгөөгүй байсан ч комлайлер this хувьсагчийг далдаар ашигладаг. 
+This хувьсагчийг илээр тодорхойлохдоо:
+Class employee { 
+private: 
+int number;
+public:
+void print() { 
+cout<<”area”<<this->area();
+}
+3.2 Полиморфизм гэж юу вэ? Хэдэн янз байдаг вэ?
+
+Полиморфизм (Polymorphism) гэдэг нь нэг интерфейсээр олон төрлийн хэрэгжилт буюу зан үйл үзүүлэх чадварыг хэлнэ. Нэг нэртэй функц эсвэл интерфейс нь олон өөр төрлийн объект дээр өөр өөрөөр ажиллах чадвартай байна. Полиморфизмын төрлүүд:
+
+1. Компайл хийх үеийн (Compile-time) полиморфизм
+
+Function overloading (Функц давхардуулах)
+Operator overloading (Оператор давхардуулах)
+Компайл хийх үед аль функц ашиглагдах нь тодорхой байдаг. Жишээ:
+
+class Print {
+public:
+    void show(int a) { std::cout << "Int: " << a << std::endl; }
+    void show(double a) { std::cout << "Double: " << a << std::endl; }
+};
+
+2. Гүйцэтгэх үеийн (Runtime) полиморфизм
+
+Virtual functions (Виртуал функц)
+Function overriding (Функц дахин тодорхойлолт)
+Объект яг runtime дээр ямар төрлийн функц дуудахаа шийддэг. Жишээ:
+
+class Shape {
+public:
+    virtual void draw() { std::cout << "Drawing Shape" << std::endl; }
+};
+
+class Circle : public Shape {
+public:
+    void draw() override { std::cout << "Drawing Circle" << std::endl; }
+}; 
+
+Полиформизмыг ашигласнаар кодын уян хатан байдал нэмэгдэж програм хангамжийн өргөтгөхөд амархан болж, код давталт багасна, дахин ашиглагдах боломж ихэсдэг, Мөн нэг интерфейсээр олон төрлийн классыг удирдах боломжтой болдог.
+3.3 Static гишүүн өгөгдөл гэж юу вэ? Static гишүүн өгөгдлийн амьдралын мөчлөг ямар байдаг вэ?
+Статик гишүүн өгөгдөл бол ямар ч объекттой холбогдогүй, классын өгөгдөл. Статик өгөгдлийг бүх объект дундаа хэрэглэхээд ерөнхий үүсгэдэг.  Энэ нь тухайн классын бүх объектуудад нийтлэг хэрэглэгддэг бөгөөд тусдаа санах ойд хадгалагддаг онцлогтой.
+
+Програм эхлэхэд Static гишүүн өгөгдөлд зориулсан санах ой үүснэ, програм дуусах хүртэл хадгалагддаг. Програм дуусахад Static гишүүн өгөгдөл устгагдана.
+3.4 Static гишүүн өгөгдөлд хэрхэн хандах вэ? Объектоор эсвэл классаар дамжуулж хандах.
+Static гишүүн өгөгдөл нь бүх объектуудад нийтлэг байх учраас түүнд классаар дамжуулж хандаж болно. Объектоор дамжуулж хандах боломжтой боловч static гишүүн нь бүх объектод нэгэн адил хуваарилагддаг тул объект бүр тусдаа хувьсагч ашиглахгүй тул програмын логик болон хуваарилалтыг төөрөгдөлд оруулдаг. [2]
+Учир нь static гишүүн нь тухайн объектын бус, анги (class)-ийн түвшинд харьяалагддаг бөгөөд объект бүрт тусдаа байхгүй. [2]
+
+Объектоор дамжуулж хандах (боломжтой, гэхдээ санал болгохгүй): [3]
+#include <iostream>
 using namespace std;
-
-// Shape (Durs) class
-class shape {
-protected:
-    char *name;       // Dursnii neriig khadgalakh
-    static int count; // Bukh obj-iig toolokh static hibsagch
+class Example {
 public:
-    shape() : name(nullptr) { count++; }  // counstructor -object uusgekh burd count nemegdene
-    virtual ~shape() { delete[] name; count--; }  // sanakh oig chuluulukh count khasagdana
-
-    //Dursnii neriig abakh function
-    char *get_name() { return this->name; }
-
-    //Dursnii neriig tokhiruulakh function
-    void set_name(const char *n) {
-        if (name != nullptr)
-            delete[] name; //Khuuchin neriin sanakh oig chuluulnu
-        name= new char[strlen(n) + 1]; // Shine sanakh oi uusgene, gargana
-        strcpy(name, n); // Neriig khuulne
-    }
-
-    virtual void print() { cout<<name<<" "; } // Dursnii neriig kheblekh
-
-    static int get_count() { return count; } // Niit object-iin toog abakh function
+    static int count; // Static gishuun ugugdul
 };
-int shape::count=0; // Static khubtsagchiin ankhnii utga
-
-// Two-dimensional (2 Khemjeetei) shape class
-class twod : public shape {
-protected:
-    int a;
-public:
-    twod(int _a) : a(_a) {}  // constructor
-
-    virtual float area()=0;      // jinkhene hiisber function - talbai olokh
-    virtual float perimeter()=0; // Jinkhen hiisber function - perimeter olokh
-
-    virtual void print() { // Dursnii medeelliig kheblekh
-        shape::print(); // Neriig kheblekh
-        cout<<this->a<<" ";
-        cout<<"Area: "<<this->area()<<" Perimeter: "<<this->perimeter()<<endl;
-    }
-};
-
-// Circle class
-class circle : public twod {
-public:
-    circle(int _a) : twod(_a) { set_name("Circle"); } // Constructor, neriig tokhiruulakh
-
-    float area() override { // Talbai olokh
-        return M_PI*this->a*this->a;
-    }
-
-    float perimeter() override { // Perimeter olokh
-        return 2*M_PI*this->a;
-    }
-};
-
-// Square class
-class square : public twod {
-public:
-    square(int _a) : twod(_a) { set_name("Square"); } // Constructor, neriig tokhiruulakh
-
-    float area() override { // Talbai olokh
-        return this->a*this->a;
-    }
-
-    float perimeter() override { // Perimeter olokh
-        return 4*this->a;
-    }
-};
-
-// Triangle class
-class triangle : public twod {
-public:
-    triangle(int _a) : twod(_a) { set_name("Triangle"); } // constructor, neriig tokhiruulakh
-
-    float area() override { // Talbai olokh
-        return (sqrt(3)/4)*this->a*this->a;
-    }
-
-    float perimeter() override { // perimeter olokh
-        return 3*this->a;
-    }
-};
-
-// Talbaigaar erembelekh function (Bubble Sort )
-void sort_by_area(twod **shapes, int size) {
-    for (int i=0; i<size; i++) {
-        for (int j=0; j<size-1-i; j++) {
-            if (shapes[j]->area()>shapes[j+1]->area()) {
-                swap(shapes[j], shapes[j+1]); // Bagaasaa ikh ruu n eremblekh
-            }
-        }
-    }
-}
-
-// Perimeter-eer eremblekh function (Bubble Sort)
-void sort_by_perimeter(twod **shapes, int size) {
-    for (int i=0; i<size; i++) {
-        for (int j=0; j<size-1-i; j++) {
-            if (shapes[j]->perimeter()>shapes[j+1]->perimeter()) {
-                swap(shapes[j], shapes[j+1]); // Mun bagaasaa ikh ruu n eremblsen
-            }
-        }
-    }
-}
-
+// Static gishuun ugugdliig classiin gadna ekhluulekh
+int Example::count = 0;
 int main() {
-    int size;
-    cout<<"Heden durs oruulah be?: ";
-    cin>>size; // kheden durs uuzgekh be toog n oruulna uu
-
-    twod **shapes=new twod*[size]; //Dinamic khusnegt uusgekh
-
-    for (int i=0; i<size; i++) {
-        int k, a;
-        cout<<"Durs "<<i<<": "<<endl<<"1. Square"<<endl<<"2. Triangle"<<endl<<"3. Circle"<<endl;
-        cin>>k; //Dursnii turliig songono
-        cout<<"a: ";
-        cin>>a; //Taliin urtiig oruulakh
-
-        switch (k) { // Songoltiin daguu object uusgene
-            case 1: shapes[i]=new square(a); break;
-            case 2: shapes[i]=new triangle(a); break;
-            case 3: shapes[i]=new circle(a); break;
-            default: 
-                cout<<"Buruu songolt, dahin oruulna uu: "<<endl; 
-                i--; // Buruu songolt khiisen bol dabtana oruulakh
-                break;
-        }
-    }
-
-    //Niit uusgsen objectiin toog kheblekh
-    cout<<"Niit uusgesen objectiin too: "<<shape::get_count()<<endl;
-
-    //Talbaigaar eremblekh ba kheblekh
-    cout<<"Talbaigaar erembelegdsen ni:"<<endl;
-    sort_by_area(shapes, size);
-    for (int i=0; i<size; i++) shapes[i]->print();
-
-    //Perimeter-eer eremblekh ba kheblekh
-    cout<<"\nPerimeter eer erembelegdsen ni:"<<endl;
-    sort_by_perimeter(shapes, size);
-    for (int i=0; i<size; i++) shapes[i]->print();
-
-    // Sanakh oig chuluulukh
-    for (int i=0; i<size; i++) delete shapes[i]; // Object-uudiig ustgakh
-    delete[] shapes; // Dinamic khusnegt uusgekh
-
+    Example obj1, obj2;
+ 
+    obj1.count = 5; // Objecteer n handakh
+    cout << "obj2.count: " << obj2.count << endl; // obj2.count mun 5 bolno
+ 
     return 0;
 }
+ 
+Гаралт:
+obj2.count: 5
+ 
+obj1.count-ийг өөрчилсөн ч энэ нь бүх объектуудад нөлөөлж, obj2.count мөн адил өөрчлөгдөж байна.
+Классаар дамжуулж хандах: [3]
+#include <iostream>
+using namespace std;
+ 
+class Example {
+public:
+    static int count;
+};
+ 
+// Static gishuun ugugdliig classiin gadna ekhluulekh
+int Example::count = 10;
+int main() {
+    cout << "Count: " << Example::count << endl; // Classaar damjuulna handakh
+    Example::count = 20; // Shine utga onokh
+    cout << "Updated Count: " << Example::count << endl;
+    return 0;
+}
+ 
+Гаралт:
+Count: 10
+Updated Count: 20
+3.5 Static гишүүн функцийг хэрхэн зарладаг, дууддаг вэ?
+Static гишүүн функц нь class дотор static түлхүүр үгээр зарлагддаг. Энэ функц нь class-ын   бүх объектуудад нийтлэг байдаг бөгөөд зөвхөн static гишүүн өгөгдлүүдийг ашиглах боломжтой.
+#include <iostream>
+using namespace std;
+ 
+class Counter {
+private:
+    static int count; // Static gishuun ugugdul
+public:
+    // Static gishuun funkts zarlakh
+    static void increment() { // Static funkts
+        count++;
+    }
+    static int getCount() {  // Static funkts
+        return count;
+    }
+};
+ 
+// Static gishuun ugugdliig classiin gadna ekhluulekh
+int Counter::count = 0;
+ 
+int main() {
+    // Static funkts duudakh (object uusgekhguigeer)
+    Counter::increment();  // count-iig 1-eer nemekh
+    Counter::increment();  // count-iig 2-oor nemekh
+    cout << "Count: " << Counter::getCount() << endl; // count-iig abakh
+ 
+    return 0;
+}
+static функц нь static гишүүн өгөгдөл (count) болон static гишүүн функцүүдийг ашиглан объект үүсгэхгүйгээр дуудлагддаг.
+Counter::increment() ба Counter::getCount() гэсэн функцүүдийг классаар дамжуулан шууд дуудсан.
+static функц нь зөвхөн static гишүүн өгөгдлүүдийг ашиглаж болно. Тиймээс энэ функц нь объектын өгөгдөл (non-static members) руу хандах боломжгүй.
+3.6 Жинхэнэ хийсвэр функц (Pure Virtual Function): [2][3]
+Жинхэнэ хийсвэр функц (Pure Virtual Function) нь virtual түлхүүр үгээр тодорхойлогдож, = 0; тэмдэглэгээтэйгээр зарлагдсан функц юм. 
+virtual түлхүүр үгээр тодорхойлогддог.
+= 0; тэмдэглэгээтэй байдаг.
+
+3.7 Хийсвэр класс (Abstract class) гэж юу вэ? Хэрхэн ашигладаг вэ?
+Хэрэв класст дор хаяж нэг жинхэнэ хийсвэр функц байвал тэрхүү класс хийсвэр (abstract) класс болно.
+Эх классаас объект үүсгэх боломжгүй. Удамшсан классаас объект үүсгэнэ.
+Хэрэгжүүлэлтгүй (body-гүй) тул удамшсан классууд үүнийг заавал дахин программчиллаж (override) ашиглана.
+ //Хийсвэр класс (Энэ классаас объект үүсгэх боломжгүй)
+class Animal
+{
+  public:
+    virtual int GetNumberOfLegs() = 0; // Жинхэнэ хийсвэр функц
+};
+ //Хийсвэр классаас удамшсан класс (Энэ классаас объект үүсгэх боломжтой)
+class Duck : public Animal
+{
+  public:
+     int GetNumberOfLegs() override { return 2; } // Дахин тодорхойлсон функц
+};
+
+
+3.8 Жинхэнэ хийсвэр функцын давуу тал, яагаад ашиглах ёстой вэ?
+Жинхэнэ хийсвэр функцын давуу талууд:
+
+Заавал функцыг дахин тодорхойлж бичихийг шаарддаг ба энэ нь кодыг илүү цэгцтэй, алдаагүй болгоно.
+Полиморфизмыг хэрэгжүүлэх боломжтой.
+
+Класс холимог удамшилаар удамших үед иймээр төсөөлдөг.
+  A
+  / \
+B   C
+  \ /
+  D
+
+Яг үнэндээ санах ойд ингэж хадгалагддаг
+A   A
+ |     |
+B   C
+  \ /
+  D
+
+Үүнээс үүдэн гишүүн өгөгдлүүд давхардах аюултай.
+
+Харин A-г хийсвэр класс болговол:
+A-д гишүүн өгөгдөл үүсэхгүй, зөвхөн функцийн тодорхойлолт л үүснэ.
+
+
+Ингэснээр B, C хоёр A-г удамшсан ч санах ойд A-ийн гишүүн өгөгдөл давхцахгүй.
+
+
+D класс дээр мөн гишүүн өгөгдлийн давхардал үүсэхгүй.
+
+
+4. ХЭРЭГЖҮҮЛЭЛТ
+Shape class 
+class shape
+{
+protected:
+    // Дүрсийн нэрийг хадгалах динамик массив
+    char *name;
+    // Static хувьсагч: бүх 'shape' болон түүнээс удамшсан классын объектийн тоог хадгалах
+    static int object_count;
+public:
+    // Анхдагч байгуулагч
+    shape() : name(nullptr)
+    {
+        // Объект үүсгэх үед object_count 1-ээр нэмэгдэнэ
+        this->object_count++; // this ашиглаж object_count руу хандаж байна
+    }
+    // Устгагч (destructor) функц - объектийг санах ойгоос устгах үед дуудагдана
+    virtual ~shape()
+    {
+        // Хэрэв name нь nullptr биш бол санах ойг чөлөөлнө
+        delete[] name;        // name-г чөлөөлөх
+        this->object_count--; // this ашиглаж object_count руу хандах
+        // Объект устгах бүрт object_count 1-ээр багасна
+        object_count--;
+    }
+    // Утга оноох статик функц
+    static void set_count(int count)
+    {
+        object_count = count;
+    }
+    // Утга авах статик функц
+    static int get_count()
+    {
+        return object_count;
+    }
+    // Одоогийн объектийн утгыг хэвлэх
+    static void print_count()
+    {
+        cout << "Niit object: " << object_count << endl;
+    }
+    // Объектийн нэрийг буцаах функц
+    char *get_name()
+    {
+        return this->name; // this нь тухайн объектын name гишүүнд хандаж байна.
+    }
+    // Объектийн нэрийг тохируулах функц
+    void set_name(const char *n)
+    {
+        // Хэрэв өмнө нь нэр өгсөн бол санах ойг чөлөөлнө
+        if (this->name != nullptr) // this-ээр тухайн объектоос name гишүүн рүү шууд хандана
+            delete[] this->name;   // Санах ойгоос чөлөөлнө
+        // Шинэ нэрт зориулж санах ой гаргах, хуулах
+        this->name = new char[strlen(n) + 1]; // +1 нь төгсгөлийн '\0'- д зориулагдсан
+        strcpy(this->name, n);                // тэмдэгт мөрийг хуулна
+    }
+    virtual void print() { cout << name << " "; } // хэвлэх хийсвэр функц
+};
+// Static хувьсагчийг классын гадна талд үүсгэж байна
+int shape::object_count = 0; // Анхдагч утга оноож байна
+
+
+object_count — static хувьсагч нь бүх объектуудын нийт тоог хадгална.
+print_count() – нийт объектын тоог хэвлэх static функц
+print() – нэрийг хэвлэх виртуал функц
+name хувьсагчаар дүрсийн нэр хадгална.
+set_name(), get_name() – нэр оноох, буцаах
+
+Twod class 
+class twod : public shape
+{
+protected:
+    int a; // Талын урт эсвэл радиусыг хадгалах гишүүн өгөгдөл
+public:
+    twod(int _a) : a(_a) {}        // анхдагч байгуулагч
+    virtual float area() = 0;      // талбай хадгалах жинхэнэ хийсвэр функц
+    virtual float perimeter() = 0; // периметр хадгалах жинхэнэ хийсвэр функц
+    virtual void print()           // хэвлэх функц - нэр, хэмжээ, талбай, периметр
+    {
+        shape::print(); // Shape class-н print-г дуудаж байна
+        cout << a << " ";
+        // виртуал функцүүдийг тухайн объектын төрлөөс хамаарч дуудуулж байна
+        cout << "talbai:" << this->area() << endl;
+        cout << "perimeter:" << this->perimeter() << endl;
+    }
+};
+Хоосон (pure virtual) функцүүдээр area() ба perimeter() функцыг заавал дахин тодорхойлуулах шаардлагатай болгож байна.
+Абстракт класс тул twod өөрөө объект үүсгэх боломжгүй.
+
+Circle class
+class circle : public twod
+{
+public:
+    circle(int _a) : twod(_a) // анхдагч байгуулагч
+    {
+        set_name("Circle"); // нэрийг Circle болгон тохируулна
+    }
+    float area() override // area-г дахин тодорхойлно
+    {
+        return M_PI * this -> a * this -> a; // дугуйн талбайг буцаана
+    }
+    float perimeter() override // perimeter-г дахин тодорхойлно
+    {
+        return M_PI * 2 * this -> a; // дугуйн периметрийг буцаана
+    }
+};
+area() ба perimeter() функцүүдийг override хийсэн.
+Функцээс объектыг(талбай, периметр) буцаах тохиолдолд this хувьсагч ашигласан.
+Square class
+class square : public twod
+{
+public:
+    square(int _a) : twod(_a) // анхдагч байгуулагч
+    {
+        set_name("Square"); // нэриийг Square болгон тохируулна
+    }
+
+
+    float area() override // area-г дахин тодорхойлно
+    {
+        return a * a; // квадратын талбайг буцаана
+    }
+
+
+    float perimeter() override // perimeter-г дахин тодорхойлно
+    {
+        return 4 * a; // квадратын периметрийг буцаана
+    }
+};
+area() ба perimeter() функцүүдийг override хийсэн.
+Гишүүн хувьсагчтай давхцах тохиолдолд, функцээс объектыг буцаах тохиолдолд this хувьсагч ашигласан. 
+Triangle class
+class triangle : public twod
+{
+public:
+    triangle(int _a) : twod(_a) // анхдагч байгуулагч
+    {
+        set_name("Triangle"); // нэриийг Triangle болгон тохируулна
+    }
+    float area() override // area-г дахин тодорхойлно
+    {
+        return (sqrt(3) / 4) * this -> a * this-> a; // зөв гурвалжингийн талбайг буцаана
+    }
+    float perimeter() override // perimeter-г дахин тодорхойлно
+    {
+        return 3 * this -> a; // зөв гурвалжингийн периметрийг буцаана
+    }
+};
+area() ба perimeter() функцүүдийг override хийсэн.
+Гишүүн хувьсагчтай давхцах тохиолдолд, функцээс объектыг (зөв гурвалжингийн периметр, талбай) буцаах тохиолдолд this хувьсагч ашигласан.
+main функц
+int main()
+{
+    cout << "Objectiin too: ";
+    shape::print_count(); //Static хувьсагч дамжуулсан Static хэвлэх функцийг дуудаж байна
+    int size; // дүрсүүдийн объектийн тоон хэмжээтэй массивийн хэмжээ
+    cout << "heden durs oruulah ve?: " << endl;
+    cin >> size; // хэмжээний утгыг гараас авна
+    twod **shapes = new twod *[size]; // twod* руу заасан динамик массив зарлаж байна.
+
+
+    // Дүрсүүдийг оруулж буй давталт
+    for (int i = 0; i < size; i++)
+    {
+        int k; // Дүрсийн сонголтыг хадгалах хувсагч
+        int a; // Тал эсвэл радиусын утгыг хадгалах хувьсагч
+        // Хэрэглэгчид зориулсан дүрсийг сонгох цэс
+        cout << "durs " << i + 1 << ": " << endl
+             << "1. Square" << endl
+             << "2. Triangle" << endl
+             << "3. Circle" << endl;
+        cin >> k; // Сонголтын утгыг гараас авна
+        // а-н утгыг гараас авна
+        cout << "a: ";
+        cin >> a;
+        // Сонголтоор обьектон массив үүсгэх switch case
+        switch (k)
+        {
+        case 1:
+            shapes[i] = new square(a); // хэрэв k-н утга 1 бол square объект үүсгэнэ
+            break;
+        case 2:
+            shapes[i] = new triangle(a); // хэрэв k-н утга 2 бол square объект үүсгэнэ
+            break;
+        case 3:
+            shapes[i] = new circle(a); // хэрэв k-н утга 3 бол square объект үүсгэнэ
+            break;
+        // 1, 2, 3-с өөр утга оруулбал массивт өөр объект үүсгэх
+        default:
+            cout << "Buruu songolt hiilee, dahin hiine uu: " << endl;
+            i--;
+            break;
+        }
+    }
+    cout << "Objectiin too: " << shape::get_count() << endl; // Static нийлбэрийн утга буцаах функцыг дуудан хэвлэж байна
+shape::print_count() 
+Статик хувьсагчийн утга агуулсан статик гишүүн функц(утгыг хэвлэнэ)
+
+shape::get_count()
+Статик хувьсагчийн утга агуулсан статик гишүүн функц(утгыг буцаана)
+
+cin >> size
+Оруулах дүрсүүдийн тоог хэрэглэгчээс авч байна
+
+twod **shapes = new twod *[size]
+Динамик санах ойд twod төрлийн заагч массив үүсгэж байна
+
+cin >> k
+Хэрэглэгчээс оруулах дүрсийн төрлийг (1: Square, 2: Triangle, 3: Circle) авч байна
+
+cin >> a
+Хэрэглэгчээс тал эсвэл радиусын утгыг авч байна
+
+shapes[i] = new square(a)
+Square төрлийн объект динамик байдлаар үүсгэж shapes массивт хадгална
+
+shapes[i] = new triangle(a)
+Triangle төрлийн объект динамик байдлаар үүсгэж shapes массивт хадгална
+
+shapes[i] = new circle(a)
+Circle төрлийн объект динамик байдлаар үүсгэж shapes массивт хадгална
+
+cout << "Buruu songolt hiilee, dahin hiine uu: "
+Буруу сонголт хийсэн үед хэрэглэгчид мэдэгдэж дахин оруулах боломж олгож байна
+
+
+Жишээ гаралт (output)
+3 дүрс оруулсан гэж үзье:
+Square, a = 4
+Triangle, a = 4
+Circle, a = 4
+Гаралт:
+Talbaigaar erembelegdsen ni:
+Triangle 4 talbai:6.9282
+perimeter:12
+
+Square 4 talbai:16
+perimeter:16
+
+Circle 4 talbai:50.2655
+perimeter:25.1327
+
+Perimetereer erembelegdsen ni:
+Triangle 4 talbai:6.9282
+perimeter:12
+
+Square 4 talbai:16
+perimeter:16
+
+Circle 4 talbai:50.2655
+perimeter:25.1327
+5. ДҮГНЭЛТ
+    Энэхүү лабораторийн ажилд статик гишүүд, this заагч, полиморфизм, жинхэнэ хийсвэр функц, хийсвэр класс зэргийг практикт хэрэгжүүлж үзсэн. Жинхэнэ хийсвэр функц ашигласнаар олон төрлийн объектуудыг нэг интерфейсээр хялбар удирдах боломжтой болохыг ойлгосон. Мөн статик гишүүн өгөгдөл ашиглан бүх объектуудад нийтлэг мэдээллийг хянах боломжтой болсон.
+    6. БАГИЙН ГИШҮҮДИЙН ОРОЛЦОО
+Багийн гишүүн бүрийн оролцоо
+Багийн гишүүний нэр
+Оруулсан хувь нэмэр
+С. Аминаа
+Оршил, зорилго, багийн оролцоо хэсгүүдийг боловсруулж, тайлангийн гол дүгнэлтүүдийг нэгтгэн дүгнэв.. 
+This хувьсагч, Полиморфизм мөн тэр нь хэдэн янз байдаг зэргийг судалсан.
+Классын гишүүн функцууд дотор гишүүн функц болон гишүүн өгөгдөл рүү хандахдаа this хувьсагч оруулсан. 
+Кодын алдааг хянаж, тайлбар оруулсан. 
+Б. Тэмүүлэн
+Жинхэнэ хийсвэр функц, хийсвэр классыг судалж хэрхэн ашигладаг талаар оруулсан. 
+Жинхэнэ хийсвэр функцийг давуу тал буюу яагаад ашиглах шаардлагатай талаар судалж бичсэн.
+Б. Өмирсерик
+Static гишүүн өгөгдөл, амьдралын мөчлөг түүнд хандах, static гишүүн функцийг зарлах, дуудах талаар судалсан.
+Shape class-д үүссэн бүх объектыг тоолдог static хувьсагч нэмж, хэвлэж харуулж, static хувьсагчид утга оноож, утгыг нь авах статик функц бичсэн. 
+
+Багаар ажиллахад тулгарсан асуудал 
+Зарим гишүүн хийсвэр функц, виртуал функцийн ялгааг бүрэн ойлгоогүй байсан нь код бичихэд хүндрэл үүсгэсэн.
+Static хувьсагчийг зөв зарлаж, утга оноохгүй байсан
+Багаар ажиллаад сурсан зүйлсээ (lessons learned) дүгнэн бичнэ.
+Жинхэнэ хийсвэр функцийн үүрэг, хэрэглээг практик дээр бүрэн ойлгосон Нэг интерфейсээр олон төрлийн объектуудыг удирдах боломжийг virtual болон pure virtual функц ашигласнаар ойлгосон.
+Static гишүүн өгөгдлийг хэрхэн зөв ашиглах, гадаад утга оноох чухал гэдгийг мэдсэн
+Нэг код дээр зэрэг ажиллах, хувиарлаж хийсэн кодыг нэгтгэх арга барилд суралцсан.
+   7. АШИГЛАСАН МАТЕРИАЛ
+1. Объект хандлагат технологийн С++ програмчлал, Ж.Пүрэв, 2008, Улаанбаатар.
+2. GeeksforGeeks - C++ Dynamic Memory Allocation.
+3. https://cppreference.com - Constructors and Destructors
+4. https://en.wikipedia.org/wiki/Multiple_inheritance
+
+8. ХАВСРАЛТ
+https://github.com/z0bx/the_trinity/tree/main
